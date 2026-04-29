@@ -1,6 +1,12 @@
 # google-github-actions/get-gke-credentials
 
-Hardened GitHub Action by [Chainguard](https://www.chainguard.dev).
+Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/google-github-actions/get-gke-credentials](https://github.com/google-github-actions/get-gke-credentials).
+
+## Versions
+
+| Version | Tag | Upstream commit |
+|---------|-----|-----------------|
+| v3.0.0 | [`v3.0.0`](https://github.com/chainguard-actions/get-gke-credentials/tree/v3.0.0) | — |
 
 ## Privacy
 
