@@ -1,7 +1,0 @@
-{
-  "owner": "google-github-actions",
-  "name": "get-gke-credentials",
-  "visibility": "internal",
-  "description": "A GitHub Action that configure authentication to a GKE cluster.",
-  "block_publish": false
-}
