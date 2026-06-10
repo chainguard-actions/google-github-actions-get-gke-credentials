@@ -1,6 +1,7 @@
 # google-github-actions/get-gke-credentials
 
-A GitHub Action that configure authentication to a GKE cluster.
+Generate ephemeral credentials for authenticating to Google Kubernetes Engine
+(GKE) and kubectl, helm, etc.
 
 Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/google-github-actions/get-gke-credentials](https://github.com/google-github-actions/get-gke-credentials).
 
