@@ -1,4 +1,4 @@
-name: Test basic usage - no GCP credentials
+name: Test custom context name
 on:
   workflow_dispatch:
 jobs:
@@ -13,6 +13,8 @@ jobs:
           cluster_name: my-cluster
           location: us-central1
           project_id: my-project
+          context_name: my-custom-context
+          namespace: my-namespace
       - name: Assert action ran and failed gracefully (no GCP credentials)
         env:
           OUTCOME: ${{ steps.action.outcome }}

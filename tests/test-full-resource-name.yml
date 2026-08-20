@@ -1,4 +1,4 @@
-name: Test basic usage - no GCP credentials
+name: Test full resource name for cluster_name
 on:
   workflow_dispatch:
 jobs:
@@ -10,9 +10,7 @@ jobs:
         uses: .
         continue-on-error: true
         with:
-          cluster_name: my-cluster
-          location: us-central1
-          project_id: my-project
+          cluster_name: projects/my-project/locations/us-east1/clusters/my-cluster
       - name: Assert action ran and failed gracefully (no GCP credentials)
         env:
           OUTCOME: ${{ steps.action.outcome }}

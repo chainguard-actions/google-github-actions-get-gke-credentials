@@ -1,0 +1,84 @@
+name: 'Integration'
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'release/**/*'
+  pull_request:
+    branches:
+      - 'main'
+      - 'release/**/*'
+  workflow_dispatch:
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
+defaults:
+  run:
+    shell: 'bash'
+
+jobs:
+  public:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # ratchet:actions/checkout@v4
+
+      - uses: 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' # ratchet:actions/setup-node@v4
+        with:
+          node-version-file: 'package.json'
+
+      - name: 'npm build'
+        run: 'npm ci && npm run build'
+
+      - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3
+        with:
+          workload_identity_provider: '${{ vars.WIF_PROVIDER_NAME }}'
+          service_account: '${{ vars.SERVICE_ACCOUNT_EMAIL }}'
+
+      - name: 'get-gke-credentials'
+        uses: './'
+        with:
+          project_id: '${{ vars.PROJECT_ID }}'
+          cluster_name: '${{ vars.PUBLIC_CLUSTER_NAME }}'
+          location: '${{ vars.PUBLIC_CLUSTER_LOCATION }}'
+          namespace: 'default'
+
+      - name: 'kubectl'
+        run: |-
+          kubectl get ns
+
+  private:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # ratchet:actions/checkout@v4
+
+      - uses: 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' # ratchet:actions/setup-node@v4
+        with:
+          node-version-file: 'package.json'
+
+      - name: 'npm build'
+        run: 'npm ci && npm run build'
+
+      - uses: 'google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093' # v3
+        with:
+          workload_identity_provider: '${{ vars.WIF_PROVIDER_NAME }}'
+          service_account: '${{ vars.SERVICE_ACCOUNT_EMAIL }}'
+
+      - name: 'get-gke-credentials'
+        uses: './'
+        with:
+          project_id: '${{ vars.PROJECT_ID }}'
+          cluster_name: '${{ vars.PRIVATE_CLUSTER_NAME }}'
+          location: '${{ vars.PRIVATE_CLUSTER_LOCATION }}'
+          use_connect_gateway: 'true'
+          namespace: 'default'
+
+      - name: 'kubectl'
+        run: |-
+          kubectl get ns
